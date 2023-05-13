@@ -1,4 +1,5 @@
 # fAIble
 hackathon project
 
-initial commit
+source env/bin/activate
+to get the python virtual environment running
