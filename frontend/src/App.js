@@ -1,12 +1,13 @@
-import React from 'react';
+import './App.css';
 import HomePage from './components/homepage';
-import './index.css'; 
+
 
 function App() {
   return (
-    <div className="w-screen h-screen bg-blue-500">
+    <div className="min-h-screen bg-gradient-to-r from-pink-500 to-blue-500">
       <HomePage />
-    </div>
+    
+  </div>
   );
 }
 
