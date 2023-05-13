@@ -1,6 +1,6 @@
-from myflaskapp import create_app
+from myflaskapp import app
 
-app = create_app()
+faible_app = app.create_app()
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    faible_app.run(debug=True)
