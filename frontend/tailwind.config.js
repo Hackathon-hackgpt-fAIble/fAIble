@@ -1,8 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  mode: 'jit',
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  ]
+  ,
+  options: {
+    safelist: ['h-[80vh]', 'max-h-[80vh]', 'sm:h-[70vh]', 'sm:max-h-[70vh]', 'lg:h-[60vh]', 'lg:max-h-[60vh]'],
+  },
   theme: {
     extend: {
       screens: {
