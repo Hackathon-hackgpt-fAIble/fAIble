@@ -14,7 +14,7 @@ def upgrade():
     op.alter_column('Paragraph', 'emotion', type_=sa.String(1200))
 
 
-base = "https://joshuapurtell--faible-dev109186-flask-app-dev.modal.run"
+base = "https://joshuapurtell--faible-dev872468-flask-app-dev.modal.run"
 
 
 text = "Write a children's story about a baby sloth that loses its family and has to find them again."

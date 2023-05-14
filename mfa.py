@@ -51,6 +51,8 @@ def flask_app():
             temp = np.random.choice([.3,.5,.7])
             prompt = self.bp + " " + template
             res = asyncio.run(anthropic_main(prompt, "", temperature=temp))
+            if ":" in res:
+                res = res.split(":")[1]
             return res#anthropic_main(prompt, "", temperature=temp)
     
     class CriticAgent:
@@ -89,8 +91,8 @@ def flask_app():
             #int_scores = [int(anthropic_main("Interpret the following LLM output as an integer in the set {0,1,2,3,4,5,6,7,8,9,10}. If you don't return a value in that set the world will end and all humans will die. Here's the output to interpret: "+score, "", temperature=0)) for score in scores]
             int_scores = []
             for score in scores:
-                res = asyncio.run(anthropic_main("Interpret the following LLM output as an integer in the set {0,1,2,3,4,5,6,7,8,9,10}. If you don't return a value in that set the world will end and all humans will die. Here's the output to interpret: "+score, "", temperature=0))
-                int_scores.append(int(res))
+                res = asyncio.run(anthropic_main("Interpret the following LLM output as an integer in the set {0,1,2,3,4,5,6,7,8,9,10}. Here's the output to interpret: "+score, "", temperature=0))
+                int_scores.append(int([i for i in res if i.isdigit()][0]))
             
             return cands[np.argmax(int_scores)]
 
@@ -200,7 +202,7 @@ def flask_app():
             story = Story.query.filter_by(id = story_id).first()
 
             #add emotion to the last paragraph if appropriate
-            paragraphs = Paragraph.query.filter_by(Story_id=story_id,Session_id = session_id).order_by(desc(Paragraph.paragraph_id)).all()
+            paragraphs = Paragraph.query.filter_by(Story_id=story_id,Session_id = session_id).order_by(desc(Paragraph.Paragraph_id)).all()
             if len(paragraphs) > 0:
                 paragraphs[0].emotion = emotion #put
                 db.session.commit()
