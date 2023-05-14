@@ -1,19 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+//import { supabase } from '../utils/supabaseClient'; // import Supabase client
 
-const SelectStory = () => {
+const SelectStory = ({supabase}) => {
     const navigate = useNavigate();
+    const [stories, setStories] = useState([]); 
 
-    // Placeholder array for your stories
-    const stories = ["Story1", "Story2", "Story3"]; 
-    const [selectedStory, setSelectedStory] = useState();
+    useEffect(() => {
+        fetchStories();
+    }, []);
+
+    const fetchStories = async () => {
+        let { data: stories, error } = await supabase
+            .from('stories') // replace 'stories' with your actual table name
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(3);
+
+        if (error) console.log("error", error);
+        else setStories(stories);
+    };
 
     const handleHome = () => {
         navigate("/");
     };
 
     const handleStorySelection = (story) => {
-        setSelectedStory(story);
         navigate('/hearstory', { state: { story } });
     };
 
@@ -28,7 +40,7 @@ const SelectStory = () => {
                         onClick={() => handleStorySelection(story)} 
                         className="flex items-center justify-center w-64 mx-2 my-2 text-4xl text-white bg-blue-600 rounded-md h-96 hover:bg-purple-600"
                     >
-                        {story}
+                        {story.title} {/* replace 'title' with the actual column name for the story title in your table */}
                     </button>
                 ))}
             </div>
