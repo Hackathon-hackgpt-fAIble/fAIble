@@ -1,14 +1,61 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 
-const TellStory = () => {
+
+
+const TellStory = ({supabase}) => {
     const navigate = useNavigate();
     const handleHome = () => {
         navigate("/");
     };
-    const handleCont = () => {
-        navigate("/tellstorycont");
+    const [loading, setLoading] = useState(false);
+
+    const handleCont = async () => {
+        setLoading(true);
+        try {
+            // Convert selectedLessons and selectedBookStyle to strings
+            const selectedLessonsString = Object.keys(selectedLessons)
+                .filter((lesson) => selectedLessons[lesson])
+                .join(", ");
+            const selectedBookStyleString = Object.keys(selectedBookStyle)
+                .filter((style) => selectedBookStyle[style])
+                .join(", ");
+            console.log('Sending data to function:', {
+                storyTheme: input,
+                selectedLessons: selectedLessonsString,
+                otherLesson: otherLessonInput,
+                selectedBookStyle: selectedBookStyleString,
+                otherBookStyle: otherBookStyleInput
+            });
+            
+
+            const { data, error } = await supabase.functions.invoke('story', {
+                body: {
+                    information: {
+                    storyTheme: input,
+                    selectedLessons: selectedLessonsString,
+                    otherLesson: otherLessonInput,
+                    selectedBookStyle: selectedBookStyleString,
+                    otherBookStyle: otherBookStyleInput
+                    }
+                }
+            });
+            console.log('Function invoked, received data:', data);
+
+            // Check for errors
+            if (error) throw error;
+
+            // Navigate to the next page
+            navigate("/tellstorycont", { state: { storyData: data['data'] }});
+        } catch (error) {
+            console.error("Error invoking function:", error.message);
+        } finally {
+            setLoading(false);
+        }
     };
+
+    
+    
     const [input, setInput] = useState("");
     const [otherLessonInput, setOtherLessonInput] = useState("");
     const [selectedLessons, setSelectedLessons] = useState({
@@ -46,9 +93,13 @@ const TellStory = () => {
     const handleOtherBookStyleInputChange = (event) => {
         setOtherBookStyleInput(event.target.value);
     };
+
+    
     
       return (
         <>
+
+        
         <h1 className="top-0 flex justify-center p-3 font-serif text-6xl font-bold tracking-wider text-white cursor-pointer"
         onClick={handleHome}>fAIble</h1>
         <div className="flex flex-col items-center pt10">
@@ -133,6 +184,7 @@ const TellStory = () => {
                     onClick={handleCont}>Continue</button>
                 </div>
             </div>
+        
         </>
       );
     }

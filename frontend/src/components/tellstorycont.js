@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate, useLocation} from "react-router-dom";
 
-const TellStoryCont = () => {
-    const [input, setInput] = useState("");
+const TellStoryCont = ({supabase}) => {
+    
     const navigate = useNavigate();
+    const location = useLocation();
+    const [input, setInput] = useState(location.state?.storyData || "");
 
     const handleInputChange = (event) => {
         setInput(event.target.value);
@@ -20,8 +22,25 @@ const TellStoryCont = () => {
         // Add your regeneration logic here
     };
 
-    const handleApprove = () => {
-        // Add your approval logic here
+    const handleApprove = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('stories')
+                .insert([
+                    { content: input },
+                ]);
+    
+            if (error) {
+                throw error;
+            }
+    
+            console.log('Story saved:', data);
+    
+            // Navigate to the home page
+            navigate("/");
+        } catch (error) {
+            console.error('Error saving story:', error.message);
+        }
     };
 
     return (
