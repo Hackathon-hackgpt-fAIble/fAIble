@@ -132,3 +132,8 @@ dist
 #venv
 *env
 faible_env
+
+#cache
+*.pyc
+*.cer
+*.pem
