@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPlay } from "react-icons/fa";
-import textToSpeech from "./textToSpeech";
+import textToSpeech from "../textToSpeech";
 
 const SelectStory = ({ supabase }) => {
   const navigate = useNavigate();

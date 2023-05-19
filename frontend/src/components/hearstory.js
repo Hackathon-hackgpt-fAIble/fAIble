@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { FaPlay, FaStop, FaPause, FaVolumeUp, FaVolumeMute, FaForward } from "react-icons/fa";
 import { createClient } from '@supabase/supabase-js';
 import axios from 'axios';
-import textToSpeech from './textToSpeech';
+import textToSpeech from '../textToSpeech';
 import { createClient as supabaseCreateClient } from '@supabase/supabase-js'; // Rename the conflicting declaration
 
 
